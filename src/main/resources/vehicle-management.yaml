@@ -79,7 +79,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Summon'
+                $ref: '#/components/schemas/Summons'
 
 components:
   parameters:
