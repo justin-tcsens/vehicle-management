@@ -51,14 +51,29 @@ public class VehicleControllerTest {
 
     @Test
     public void givenVehicle_whenGetVehicleById_thenStatus200() throws Exception {
-        val response = mvc.perform(get("/vehicle/8")
+        val carPlateNumber = commonUtil.getRandomNumber(9999999, 7);
+        val chassisNumber = commonUtil.getRandomNumber(1000000000, 19);
+
+        val response = mvc.perform(post("/vehicle")
+                        .content(getObjectAsString(createVehicle(carPlateNumber, chassisNumber)))
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+        val vehicle = mapResultToObject(response);
+
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getId()).isNotNull();
+
+        val getVehicleResponse = mvc.perform(get("/vehicle/" + vehicle.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
 
-        val vehicle = mapResultToObject(response);
-        System.out.println(response);
+        val vehicleById = mapResultToObject(response);
+        assertThat(vehicleById.getId()).isEqualTo(vehicleById.getId());
     }
 
     private Vehicle createVehicle(String carPlateNumber, String chassisNumber) {
