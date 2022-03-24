@@ -17,6 +17,7 @@ public class SummonController implements SummonApi {
         this.summonService = summonService;
     }
 
+    @Override
     public ResponseEntity<List<Summon>> getSummonByCriteria(String carPlateNumber) {
         return ResponseEntity.ok(summonService.getSummonByCarPlateNumber(carPlateNumber));
     }
